@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deno-app
+  namespace: deno-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deno-app
+  template:
+    metadata:
+      labels:
+        app: deno-app
+    spec:
+      containers:
+        - name: deno-app
+          image: maminou/deno-app
+          ports:
+          - name: http
+            containerPort: 8000
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: deno-app
+  namespace: deno-app
+  labels:
+    app: deno-app
+spec:
+  type: NodePort
+  selector:
+    app: deno-app
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
